@@ -1,13 +1,13 @@
 <?php
 /*
-
 Plugin Name: Linklist
-Plugin URI: http://www.elektroelch.de/hacks/wp/pagebar
 Description: Adds a list of mentioned links at the end of the post, page or feed.
+Plugin URI: http://www.elektroelch.de/hacks/wp/pagebar
 Version: 0.1
 Author: Lutz Schr&ouml;er
 Author URI: http://elektroelch.de/blog
 */
+
 /*  This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or

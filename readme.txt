@@ -2,7 +2,7 @@
 Contributors: Lutz Schroeer
 Tags: links
 Requires at least: 2.7
-Tested up to: 2.9-rare
+Tested up to: 3.1.3
 Stable tag: trunk
 Author: Lutz Schroeer
 Version: 0.1
