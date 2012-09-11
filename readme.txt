@@ -2,10 +2,10 @@
 Contributors: Lutz Schroeer
 Tags: links
 Requires at least: 2.7
-Tested up to: 3.1.3
+Tested up to: 3.4
 Stable tag: trunk
 Author: Lutz Schroeer
-Version: 0.1
+Version: 0.2
 Author URI: http://elektroelch.de/blog/
 License: GPL
 

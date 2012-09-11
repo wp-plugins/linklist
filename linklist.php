@@ -5,7 +5,7 @@ Description: Adds a list of mentioned links at the end of the post, page or feed
 Plugin URI: http://wordpress.org/extend/plugins/linklist/
 Version: 0.2
 Requires at least: 2.9
-Tested up to: 3.5
+Tested up to: 3.4
 Stable tag: trunk
 Author: Lutz Schr&ouml;er
 Author URI: http://elektroelch.de/blog
