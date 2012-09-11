@@ -2,11 +2,15 @@
 /*
 Plugin Name: Linklist
 Description: Adds a list of mentioned links at the end of the post, page or feed.
-Plugin URI: http://www.elektroelch.de/hacks/wp/pagebar
-Version: 0.1
+Plugin URI: http://wordpress.org/extend/plugins/linklist/
+Version: 0.2
+Requires at least: 2.9
+Tested up to: 3.5
+Stable tag: trunk
 Author: Lutz Schr&ouml;er
 Author URI: http://elektroelch.de/blog
 */
+
 
 /*  This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -57,12 +61,12 @@ if ( !class_exists('LinkList') ) {
 			return strnatcasecmp( $a[1], $b[1] );
 		}
 		/* ------------------------------------------------------------------------ */
-    function createLinkList() {
+    	function createLinkList() {
 
 			if ($this->stopCreate())
 			  return $this->content;
 
-      $this->linklist = $this->linkExtractor($this->content);
+      		$this->linklist = $this->linkExtractor($this->content);
 			if (! $this->linklist)
 			  return $this->content;
 
@@ -70,7 +74,7 @@ if ( !class_exists('LinkList') ) {
 			if (sizeof($this->linklist) < $this->options[$this->prefix . 'minlinks'] )
 				return $this->content;
 
-      if ($this->options[$this->prefix . 'sort'])
+     		if ($this->options[$this->prefix . 'sort'])
 				usort($this->linklist, array('LinkList', 'linklist_sorter'));
 
 			$list = '<div class="linklist"><span class=linklistheader">' .
@@ -102,6 +106,7 @@ if ( !class_exists('LinkList') ) {
 		    $list = substr($list, 0, strlen($this->options[$this->prefix . 'sep']) * -1);
 
 		  $list .= $end . "</div>";
+		  $list = apply_filters('linklist', $list);
 		  $this->content .= $list;
 
 			return $this->content;

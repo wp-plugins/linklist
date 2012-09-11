@@ -156,12 +156,24 @@ You can style the link list with CSS:
   </span>
 </div>
 
+= Filter =
+You can programmatically change the content of the linklist by adding a filter:
+
+<?php
+  add_filter('linklist', 'my_linklist');
+
+  function my_linklist($list) {
+    [...]
+  }
+
 
 == Credits ==
 * Joost de Valk (Yoast) for his plugin tools (yst_plugin_tools.php). http://yoast.com/
 
       
 == Changelog ==
+= v0.2 =
++ Added: filter for link list (11 SEP 2012)
 
 = v0.1 =
 Initial release (15 AUG 2009)
