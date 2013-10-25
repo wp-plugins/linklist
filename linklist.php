@@ -144,7 +144,7 @@ if ( !class_exists('PageLinkList') ) {
 			return 0;  //default
 		}
 		/* ------------------------------------------------------------------------ */
-		function linkExtractor() {
+		function linkExtractor($content) {
 		  global $post;
 			if ($this->options['page_last'])
 			  return parent::linkExtractor($post->post_content);

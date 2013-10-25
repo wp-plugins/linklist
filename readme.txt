@@ -2,10 +2,10 @@
 Contributors: Lutz Schroeer
 Tags: links
 Requires at least: 2.7
-Tested up to: 3.4
+Tested up to: 3.7
 Stable tag: trunk
 Author: Lutz Schroeer
-Version: 0.2
+Version: 0.3
 Author URI: http://elektroelch.de/blog/
 License: GPL
 
@@ -172,6 +172,10 @@ You can programmatically change the content of the linklist by adding a filter:
 
       
 == Changelog ==
+= v0.3 =
+* Fixed "Strict standards" notice in PHP 5.5
+* Checked for 3.7 compatibility
+
 = v0.2 =
 + Added: filter for link list (11 SEP 2012)
 
