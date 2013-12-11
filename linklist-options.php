@@ -20,6 +20,10 @@ if ( ! class_exists( 'LinkList_Admin' ) ) {
         ($options [$var] ? "checked" : '') . '>&nbsp;' . __($text, 'linklist') . "</label><br/>\n";
 		}
 
+    function option_trim($option) {
+        return trim($option);
+    }
+
 	function config_page() {
 
 		$options = array('post_active',	  'page_active',   'feed_active',
@@ -31,20 +35,36 @@ if ( ! class_exists( 'LinkList_Admin' ) ) {
 						 'post_exclude',  'page_exclude',  'feed_exclude',
 						 'post_sep',      'page_sep',      'feed_sep',
 						 'post_sort',     'page_sort',     'feed_sort',
-						 'post_last',     'page_last'
+						 'post_last',     'page_last',
+                         'exceptions', // divs or spans excepted from link harvest
 						);
+
+        $option_priority = 10;
 
 		if ( isset($_POST['submit']) ) {
 			if (!current_user_can('manage_options')) die(__('You cannot edit the LinkList options.'));
 			check_admin_referer('linklist-config');
 
+
 		   foreach($options as $option)
 			$ll_options[$option] = (isset  ($_POST [$option])) ? addslashes ( $_POST [$option] ) : '';
-			   update_option('linklist', $ll_options);
-		}
 
+            // convert string list to array for easier access in main plugin
+            // TODO: array_map()
+            if (isset($ll_options['exceptions'])) {
+                $ll_options['exceptions'] = explode( ',', $ll_options['exceptions']);
+                for ($i=0; $i<sizeof($ll_options['exceptions']); $i++)
+                    $ll_options['exceptions'][$i] = trim($ll_options['exceptions'][$i]);
+            }
+			update_option('linklist', $ll_options);
+
+            if (isset($_POST['priority']))
+                update_option('linklist_priority', $_POST['priority']);
+
+		}
 		$options  = get_option('linklist');
-		//var_dump($options);
+        $option_priority = get_option('linklist_priority');
+        $options['exceptions'] = implode(', ', $options['exceptions']);
 
 		?>
 		<div class="wrap">
@@ -83,8 +103,35 @@ if ( ! class_exists( 'LinkList_Admin' ) ) {
 							"content" => $this->checkbox('Display LinkList in feed', 'feed_active', $options)
 						);
 
+                        $content = '<input type="text" name="exceptions" class="regular-text"';
+                        // Condition necessary for updates
 
-						$this->postbox('linklist_general','General settings',$this->form_table($rows));
+                        if (isset($options['exceptions']))
+                            $content .= ' value="' . $options['exceptions'] . '"';
+                        $content .= '>';
+
+                        $rows[] = array(
+                            "id" => "exceptions",
+                            "label" => "Exceptions",
+                            "desc" => "Divs or spans excepted from link harvesting (comma separated)",
+                            "content" => $content
+                        );
+
+                        $content = '<input type="text" name="priority" class="regular-text"';
+                        // Condition necessary for updates
+
+                        if (isset($option_priority))
+                            $content .= ' value="' . $option_priority . '"';
+                        $content .= '>';
+
+                        $rows[] = array(
+                            "id" => "priority",
+                            "label" => "Priority",
+                            "desc" => "Priority of Linklist (1 = high; 20 = low; default = 10)",
+                            "content" => $content
+                        );
+
+                        $this->postbox('linklist_general','General settings', $this->form_table($rows));
 
 						// ----------------------------------------------------------------------
 						$rows = array();
@@ -166,9 +213,6 @@ if ( ! class_exists( 'LinkList_Admin' ) ) {
 										 $this->radiobutton('page_style', 'rbli', 'char separated', $options) .
 										 '&nbsp;<input type="text" size="10" name="page_sep" value="' .
 										  stripslashes(htmlentities($options['page_sep'])). '">'
-
-
-
 						);
 
 						$rows[] = array(
@@ -194,8 +238,6 @@ if ( ! class_exists( 'LinkList_Admin' ) ) {
 						);
 
 						$this->postbox('linklist_pages','Pages settings',$this->form_table($rows));
-
-
 
 						// ----------------------------------------------------------------------
 						$rows = array();
@@ -236,7 +278,9 @@ if ( ! class_exists( 'LinkList_Admin' ) ) {
 						);
 
 
-						$this->postbox('linklist_feed','Feed settings',$this->form_table($rows)); ?>
+						$this->postbox('linklist_feed','Feed settings',$this->form_table($rows));
+
+                        ?>
 
 						<div class="submit">
 							<input type="submit" class="button-primary" name="submit" value="Update LinkList Settings &raquo;" />

@@ -1,14 +1,14 @@
 <?php
 /*
-Plugin Name: Linklist
+Plugin Name: LinkList
 Description: Adds a list of mentioned links at the end of the post, page or feed.
 Plugin URI: http://wordpress.org/extend/plugins/linklist/
-Version: 0.2
-Requires at least: 2.9
-Tested up to: 3.4
+Version: 0.4
+Requires at least: 3.5
+Tested up to: 3.7
 Stable tag: trunk
 Author: Lutz Schr&ouml;er
-Author URI: http://elektroelch.de/blog
+Author URI: http://elektroelch.net/blog
 */
 
 
@@ -36,6 +36,22 @@ if ( !class_exists('LinkList') ) {
 		/* ------------------------------------------------------------------------ */
 		function linkExtractor($content){
 			global $post;
+
+            if ($this->options['exceptions']) {
+                // remove divs
+                $dom = new DOMDocument();
+                $dom->loadHTML($content);
+                $divs = $dom->getElementsByTagName('div');
+                foreach ($divs as $div) {
+                    if (in_array($div->getAttribute("class"), $this->options['exceptions']))
+                        $div->parentNode->removeChild($div);
+                } //foreach
+
+                // saveHTML() is adding some additional tags to the doc. Remove them:
+                $content = trim(preg_replace('/^<!DOCTYPE.+?>/', '', str_replace( array('<html>', '</html>', '<body>',
+                                             '</body>'), array('', '', '', ''), $dom->saveHTML())));
+            } //if
+
 			$linkArray = array();
 			if ( (preg_match_all('/<a\s+.*?href=[\"\']?([^\"\' >]*)[\"\']?[^>]*>(.*?)<\/a>/i',
 						$content,$matches,PREG_SET_ORDER)))
@@ -49,8 +65,8 @@ if ( !class_exists('LinkList') ) {
 		} //linkExtractor()
 		/* ------------------------------------------------------------------------ */
 		function LinkList($content) {
-			$this->options = get_option('linklist');
 			$this->content = $content;
+            $this->options = get_option('linklist');
 		} //linklist()
 		/* ------------------------------------------------------------------------ */
 		function stopCreate() {
@@ -87,7 +103,7 @@ if ( !class_exists('LinkList') ) {
 				case 'rbul': $start = "<ul>";
 										 $end   = "</ul>";
 										 break;
-		    case 'rbol': $start = "<ol>";
+		        case 'rbol': $start = "<ol>";
 					 					 $end   = "</ol>";
 										 break;
 				case 'rbli': $start = "";
@@ -109,7 +125,7 @@ if ( !class_exists('LinkList') ) {
 		  $list = apply_filters('linklist', $list);
 		  $this->content .= $list;
 
-			return $this->content;
+		  return $this->content;
 
 		} //createLinkList()
 
@@ -215,6 +231,8 @@ if ( !class_exists('BasicLinkList') ) {
 } //if
 /* =========================================================================== */
 function create_linklist($content) {
+ global $options;
+
  if (is_page())
    $linklist = new PageLinkList($content);
  elseif (is_single())
@@ -234,18 +252,31 @@ function llactivate() {
 
 	if (get_option('linklist'))
 	  return;
-	$options = array('post_active'=>'on',	'page_active'=>'on', 'feed_active'=>'on',
-					 'post_prolog'=>'Links in this post:',
-					 'page_prolog'=>'Links on this page:',
-					 'feed_prolog'=>'Links:',
-					 'post_style'=>'rbol', 'page_style'=>'rbol', 'feed_style'=>'rbol',
-					 'post_display'=>'', 'page_display'=>'',
-					 'post_more'=>'on', 'page_more'=>'on',
-					 'post_minlinks'=>0, 'page_minlinks'=>0, 'feed_minlinks'=>0,
-					 'post_sep'=>', ', 'page_sep'=>', ', 'feed_sep'=>', ',
-					 'post_sort'=>'on', 'page_sort'=>'on', 'feed_sort'=>'on',
-					 'post_last'=>'on', 'page_last'=>'on'
-					);
+	$options = ['post_active'   => 'on',
+                'page_active'   => 'on',
+                'feed_active'   => 'on',
+                'post_prolog'   => 'Links in this post:',
+                'page_prolog'   => 'Links on this page:',
+                'feed_prolog'   => 'Links:',
+                'post_style'    => 'rbol',
+                'page_style'    => 'rbol',
+                'feed_style'    => 'rbol',
+                'post_display'  => '',
+                'page_display'  => '',
+                'post_more'     => 'on',
+                'page_more'     => 'on',
+                'post_minlinks' => 0,
+                'page_minlinks' => 0,
+                'feed_minlinks' => 0,
+                'post_sep'      => ', ',
+                'page_sep'      => ', ',
+                'feed_sep'      => ', ',
+                'post_sort'     => 'on',
+                'page_sort'     => 'on',
+                'feed_sort'     => 'on',
+                'post_last'     => 'on',
+                'page_last'     => 'on'
+    ];
 	update_option('linklist', $options);
 }
 /* --------------------------------------------------------------------------- */
@@ -255,4 +286,8 @@ if (is_admin()) {
 	register_activation_hook( __FILE__, 'llactivate' );
 }
 
-add_filter('the_content', 'create_linklist');
+$priority = get_option('linklist_priority');
+if (! $priority)
+    $priority = 10;
+
+add_filter('the_content', 'create_linklist', $priority);

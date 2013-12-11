@@ -69,10 +69,15 @@ Prevents the display of the link list on the main blog page.
 Prevents the display of the link list on the main blog page.
 
 * Last page only
-If you have devided your post into several parts using <!--nextpage--> the link list is only displayed on the lsat page.
+If you have devided your post into several parts using <!--nextpage--> the link list is only displayed on the last page.
 This list will contain all links of the post. If the list is displayed at the end of every part only the links of that
 part are displayed. The settings of "Minimum links" applies to every part separately.
 
+* Exceptions
+You can except divs from being harvested for links. Enter a comma separated kist of divs to be excluded.
+
+* Priority
+There are many other plugins messing around with the post content. By altering the priority of the LinkList you can  change the position where the list appearts. 1 means high priority, 20 means low priority, default is 10.
 
 = Pages settings =
 
@@ -172,6 +177,10 @@ You can programmatically change the content of the linklist by adding a filter:
 
       
 == Changelog ==
+= v0.4 =
++ Added possibility to except divs in content from link harvesting
++ Added option to seet priority of LinkList
+
 = v0.3 =
 * Fixed "Strict standards" notice in PHP 5.5
 * Checked for 3.7 compatibility
