@@ -1,11 +1,11 @@
 === LinkList ===
 Contributors: Lutz Schroeer
 Tags: links
-Requires at least: 2.7
-Tested up to: 3.7
+Requires at least: 3.7
+Tested up to: 4.3
 Stable tag: trunk
 Author: Lutz Schroeer
-Version: 0.3
+Version: 0.5
 Author URI: http://elektroelch.de/blog/
 License: GPL
 
@@ -16,14 +16,21 @@ LinkList adds a list of mentioned links at the end of the post, page or feed.
 == Installation ==
 
 1. Download the plugin and unzip it.
-2. Upload the folder changelogger/ to your /wp-content/plugins/ folder.
+2. Upload the folder lonklist/ to your /wp-content/plugins/ folder.
 3. Activate the plugin from your WordPress admin panel.
 4. Installation finished.
 
+== Usage ==
+Linklist automatically puts a list of all link at the end of the post or page. If you want to exclude an
+individual page/post from displaying the list you can de-select the "Display Linklist" checkbox on the
+left side of the edit screen.
+
+If you want to change the display of the link list for an already existing post/page you can use
+the Quick Edit or Bulk Edit option.
 
 == Settings ==
-LinkList provides a varitey of settings to tweak the list to your needs. The settings are
-devided into three parts (posts, pages and feeds).
+LinkList provides a varietey of settings to tweak the list to your needs. The settings are
+divided into three parts (posts, pages and feeds).
 
 = General settings =
 Here you can define if the linklist should be display on posts, pages and/or feeds at all.
@@ -174,9 +181,14 @@ You can programmatically change the content of the linklist by adding a filter:
 
 == Credits ==
 * Joost de Valk (Yoast) for his plugin tools (yst_plugin_tools.php). http://yoast.com/
+* Tami Mize for assuming display option for individual posts or pages
 
       
 == Changelog ==
+= v0.5 =
++ Added display option for individual posts (inl. Quick and Bulk edit)
+
+
 = v0.4 =
 + Added possibility to except divs in content from link harvesting
 + Added option to seet priority of LinkList
