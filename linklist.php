@@ -3,9 +3,9 @@
 Plugin Name: LinkList
 Description: Adds a list of mentioned links at the end of the post, page or feed.
 Plugin URI: http://wordpress.org/extend/plugins/linklist/
-Version: 0.4
+Version: 0.5
 Requires at least: 3.5
-Tested up to: 3.7
+Tested up to: 4.2
 Stable tag: trunk
 Author: Lutz Schr&ouml;er
 Author URI: http://elektroelch.net/blog
